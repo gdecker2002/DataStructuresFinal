@@ -56,8 +56,8 @@ class Student {
     string getGrade() {
         return grade;
     }
-    void setPin(int input) {
-        int size = to_string(input).length();
+    void setPin(string input) {
+        int size = input.length();
         if(size == 4) {
             pin = input;
         }
@@ -111,10 +111,116 @@ Student getStudentByPin(Student array[], string pin, int size) {
     }
 }
 
+string getStudentInfoByPin(Student array[], string pin, int size) {
+    string returnString;
+    for(int i = 0; i < size; i++) {
+        if(pin == array[i].getPin()) {
+            returnString = "First: " + array[i].getFirst() + "  Last: " + array[i].getLast() + "  Pin: " + array[i].getPin() + "  Cost Of Lunch: $" + to_string(array[i].getLunch()) + "\n";
+            return returnString;
+        }
+    }
+}
+
+class LinkedList {
+  // attributes
+public:
+    int position;
+    string pin; //Will be used to get Student and for sorting
+    string *list=new string[15]; //List array
+    int size = 0;
+    int maxSize = 15;
+    int head = 0;
+  // Constructors
+  LinkedList() {
+
+  };
+  // Methods
+  int find_string(string item) //Used to find value within List
+  {
+  int i;
+  for(i = 0; i < maxSize; i++) { //Loops through List
+  if(list[i] == item) //If value found returns true
+      return 1;
+  }
+      return 0;
+  }
+  void createList(int inputSize, Student array[])
+  {
+      maxSize = inputSize;
+      size = 0;
+      int i = 0;
+      while(i < maxSize){
+          list[i] = array[i].getPin();
+          i++;
+      }
+  }
+
+  void removeAt(int position){
+      if(position < 0 || position >= size){
+          cout << "There is nothing at index " << position << endl;
+      }
+      else {
+          string remove;
+          remove = list[position]; //removing
+          for(int i = position;i < size; i++)
+          {
+              list[i]=list[i+1]; //Shifts array
+          }
+      size--; //Decrement size
+      }
+  }
+  void insert(string input) { //inserts value
+      list[size] = input;
+      size += 1;
+  }
+  bool isEmpty() const //Checks if empty
+  {
+      if(size == 0) {
+          cout << "List is Empty" << endl; //Returns true and displays a message to user
+          return true;
+      }
+      else {
+          return false;
+      }
+  }
+  bool isFull() const
+  {
+      return size == maxSize; //Returns true or false if array is full
+  }
+  string get(int position) {
+          return list[position]; //Returns value at array position
+  }
+  void insertionSort()
+  {
+      int i, j;
+      string pin;
+      for (i = 1; i < size; i++)
+      {
+          pin = list[i]; //key will be used to compare array values
+          j = i - 1;
+          while (j >= 0 && list[j] > pin) // Moves elements that are "key" to one position ahead of their current position
+          {
+              list[j + 1] = list[j];
+              j = j - 1;
+          }
+          list[j + 1] = pin;
+      }
+  }
+
+  void display() {
+      while(!isEmpty()) {
+          cout << get(0) << " ";
+          removeAt(0);
+      }
+  }
+};
+
 int main()
 {
     int const SIZE = 10;
     list<Student> lunchList;
+    LinkedList studentLinkedList;
+    Student tempStudent("","","","",0); //Will be used to take students out of list
     Student Jessica("Jessica", "Jones", "10", "2000", 5.99);
     Student Scoob("Scooby", "Doo", "12", "2001", 1.99);
     Student Scott("Scott", "Lang", "11", "2002", 0.99);
@@ -125,6 +231,7 @@ int main()
     Student Bob("Bob", "Barker", "11", "2007", 0.99);
     Student Polly("Polly", "Wanna Cracker", "10", "2008", 1.99);
     Student Peggy("Peggy", "Hill", "12", "2009", 3.99);
+    Student Dummy("", "", "", "", 0);
     Student studentArray[SIZE] = { Jessica, Scoob, Scott, Robert, ChrisP, ChrisE, Gage, Bob, Polly, Peggy}; //Student Array
 
     string userInputString = "";
@@ -142,9 +249,19 @@ int main()
             cout << "Enter lunch number: "; //Need to loop through students Pin numbers and make sure its a real pin
             cin >> userInputString;
 
+            if(userInputString == "0") { //breaks out of if statement back to menu if 0
+                break;
+            }
+
             while(!checkPin(studentArray, userInputString, SIZE)) {//Function here for if PIN is real, loop through student array
                 cout << "Invalid Lunch Number: "; //Need to loop through students Pin numbers and make sure its a real pin
                 cin >> userInputString;
+                if(userInputString == "0") { //breaks while loop
+                    break;
+                }
+            }
+            if(userInputString == "0") { //breaks out of if statement back to menu if 0
+                break;
             }
             if(!checkDupePin(lunchList, userInputString)) {
                 lunchList.push_back(getStudentByPin(studentArray, userInputString, SIZE));
@@ -158,6 +275,18 @@ int main()
     else if(userInputString == "2") {
         cout << "\nLunch Attendance: \n--------------------------------------\n";
         //Sort
+        string inputPin = "";
+        int listSize = lunchList.size();
+        std::list<Student>::iterator it;
+        for (it = lunchList.begin(); it != lunchList.end(); ++it){ //iterates through list
+            studentLinkedList.insert(it->getPin()); //inserts pins from list into linkedlist
+        }
+
+        studentLinkedList.insertionSort(); //sorts by pin
+        for(int i = 0; i < listSize; i++){ //loops through linked list
+            inputPin = studentLinkedList.get(i); //gets pin from studentLinkedList which will be used to retrieve student info
+            cout << getStudentInfoByPin(studentArray, inputPin, SIZE) << "\n"; //retrieves and displays student info based on pin
+    }
         //Loop through lunch attendance and display all needed info (fname, lname, pin, etc.)
 
     }
@@ -169,7 +298,7 @@ int main()
     }
     else {
         cout << "\nLunch Help - Drink\n --------------------------------------\n";
-        sideTreeDecisions(); //Creates Tree and calls for the decision tree to be traversed
+        drinkTreeDecisions(); //Creates Tree and calls for the decision tree to be traversed
         cout << "\nenter any key to return\n"; //Prevents flood of info and final decision result from being buried
         cin >> userInputString;
     }
