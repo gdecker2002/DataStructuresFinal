@@ -20,6 +20,7 @@
 #include <list>
 #include <array>
 #include <iterator>
+#include <iomanip> //precision
 #include "BinaryTree.h"
 using namespace std;
 
@@ -29,9 +30,9 @@ class Student {
     string lname;
     string grade;
     string pin; //should be a unique 4 digit number
-    double costOfLunch; //student cost of lunch (useful for reduced/free lunch)
+    string costOfLunch; //student cost of lunch (useful for reduced/free lunch)
   public:
-    Student(string inputFirst, string inputLast, string inputGrade, string inputPin, double inputLunchCost) { // Constructor with parameters
+    Student(string inputFirst, string inputLast, string inputGrade, string inputPin, string inputLunchCost) { // Constructor with parameters
           fname = inputFirst;
           lname = inputLast;
           grade = inputGrade;
@@ -68,10 +69,10 @@ class Student {
     string getPin() {
         return pin;
     }
-    void setLunch(double input) {
+    void setLunch(string input) {
         costOfLunch = input;
     }
-    int getLunch() {
+    string getLunch() {
         return costOfLunch;
     }
 }; //End of Student Class
@@ -115,7 +116,7 @@ string getStudentInfoByPin(Student array[], string pin, int size) {
     string returnString;
     for(int i = 0; i < size; i++) {
         if(pin == array[i].getPin()) {
-            returnString = "First: " + array[i].getFirst() + "  Last: " + array[i].getLast() + "  Pin: " + array[i].getPin() + "  Cost Of Lunch: $" + to_string(array[i].getLunch()) + "\n";
+            returnString = "First: " + array[i].getFirst() + "  Last: " + array[i].getLast() + "  Pin: " + array[i].getPin() + "  Cost Of Lunch: $" + array[i].getLunch() + "\n";
             return returnString;
         }
     }
@@ -176,7 +177,6 @@ public:
   bool isEmpty() const //Checks if empty
   {
       if(size == 0) {
-          cout << "List is Empty" << endl; //Returns true and displays a message to user
           return true;
       }
       else {
@@ -220,26 +220,25 @@ int main()
     int const SIZE = 10;
     list<Student> lunchList;
     LinkedList studentLinkedList;
-    Student tempStudent("","","","",0); //Will be used to take students out of list
-    Student Jessica("Jessica", "Jones", "10", "2000", 5.99);
-    Student Scoob("Scooby", "Doo", "12", "2001", 1.99);
-    Student Scott("Scott", "Lang", "11", "2002", 0.99);
-    Student Robert("Robert", "Downey Jr.", "9", "2003", 4.99);
-    Student ChrisP("Chris", "Pratt", "9", "2004", 0);
-    Student ChrisE("Chris", "Evans", "9", "2005", 0.99);
-    Student Gage("Gage", "Decker", "8", "2006", 5.99);
-    Student Bob("Bob", "Barker", "11", "2007", 0.99);
-    Student Polly("Polly", "Wanna Cracker", "10", "2008", 1.99);
-    Student Peggy("Peggy", "Hill", "12", "2009", 3.99);
-    Student Dummy("", "", "", "", 0);
+    Student Jessica("Jessica", "Jones", "10", "2000", "5.99");
+    Student Scoob("Scooby", "Doo", "12", "2001", "1.99");
+    Student Scott("Scott", "Lang", "11", "2002", "0.99");
+    Student Robert("Robert", "Downey Jr.", "9", "2003", "4.99");
+    Student ChrisP("Chris", "Pratt", "9", "2004", "0");
+    Student ChrisE("Chris", "Evans", "9", "2005", "0.99");
+    Student Gage("Gage", "Decker", "8", "2006", "5.99");
+    Student Bob("Bob", "Barker", "11", "2007", "0.99");
+    Student Polly("Polly", "Wanna Cracker", "10", "2008", "1.99");
+    Student Peggy("Peggy", "Hill", "12", "2009", "3.99");
+    Student Dummy("", "", "", "", "0");
     Student studentArray[SIZE] = { Jessica, Scoob, Scott, Robert, ChrisP, ChrisE, Gage, Bob, Polly, Peggy}; //Student Array
 
     string userInputString = "";
     while(userInputString != "stop") {
     cout << "Please Select an Option\n --------------------------------------\n";
-    cout << "1. Take Lunch Attendance\n2. Display Lunch Attendance \n3. Lunch Help - Sides \n4. Lunch Help - Drinks \n";
+    cout << "1. Take Lunch Attendance\n2. Display Lunch Attendance \n3. Lunch Help - Sides \n4. Lunch Help - Drinks \n\n'stop' to end program\n";
     cin >> userInputString;
-    while(userInputString != "1" && userInputString != "2" && userInputString != "3" && userInputString != "4") {
+    while(userInputString != "1" && userInputString != "2" && userInputString != "3" && userInputString != "4" && userInputString != "stop") {
         cout << "Invalid Choice (1-4): ";
         cin >> userInputString;
     }
@@ -287,7 +286,9 @@ int main()
             inputPin = studentLinkedList.get(i); //gets pin from studentLinkedList which will be used to retrieve student info
             cout << getStudentInfoByPin(studentArray, inputPin, SIZE) << "\n"; //retrieves and displays student info based on pin
     }
-        //Loop through lunch attendance and display all needed info (fname, lname, pin, etc.)
+        while(!studentLinkedList.isEmpty()) { //Removes Items until linked list is empty
+            studentLinkedList.removeAt(0);
+        }
 
     }
     else if(userInputString == "3") {
@@ -296,14 +297,12 @@ int main()
         cout << "\nenter any key to return\n"; //Prevents flood of info and final decision result from being buried
         cin >> userInputString;
     }
-    else {
+    else if(userInputString == "4"){
         cout << "\nLunch Help - Drink\n --------------------------------------\n";
         drinkTreeDecisions(); //Creates Tree and calls for the decision tree to be traversed
         cout << "\nenter any key to return\n"; //Prevents flood of info and final decision result from being buried
         cin >> userInputString;
     }
-    cout << "\nenter 'stop' to end program\n\n";
-
     }
     return 0;
 }
