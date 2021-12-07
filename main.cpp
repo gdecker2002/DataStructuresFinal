@@ -39,7 +39,7 @@ class Student {
           pin = inputPin;
           costOfLunch = inputLunchCost;
         }
-    void setFirst(string input) {
+    void setFirst(string input) { //Getters and Setters
         fname = input;
     }
     string getFirst() {
@@ -77,17 +77,17 @@ class Student {
     }
 }; //End of Student Class
 
-void sideTreeDecisions() {
+void sideTreeDecisions() { //Calls functions for the sideTree
     BinaryTree sideTree;
     sideTree.createSideTree();
     sideTree.callGetUserDecisions();
 }
-void drinkTreeDecisions() {
+void drinkTreeDecisions() { //Calls functions for the drinkTree
     BinaryTree drinkTree;
     drinkTree.createDrinkTree();
     drinkTree.callGetUserDecisions();
 }
-bool checkPin(Student array[], string pin, int size) {
+bool checkPin(Student array[], string pin, int size) { //Checks if PIN is valid
     for(int i = 0; i < size; i++) {
         if(pin == array[i].getPin()) {
             return true;
@@ -95,7 +95,7 @@ bool checkPin(Student array[], string pin, int size) {
     }
     return false;
 }
-bool checkDupePin(list<Student> list, string pin) {
+bool checkDupePin(list<Student> list, string pin) { //Checks if pin has been entered already
     std::list<Student>::iterator it;
     for (it = list.begin(); it != list.end(); ++it){
         if(pin == it->getPin()) {
@@ -104,7 +104,7 @@ bool checkDupePin(list<Student> list, string pin) {
     }
     return false; //Pin not already entered
 }
-Student getStudentByPin(Student array[], string pin, int size) {
+Student getStudentByPin(Student array[], string pin, int size) { //returns student object based on PIN
     for(int i = 0; i < size; i++) {
         if(pin == array[i].getPin()) {
             return array[i];
@@ -112,7 +112,7 @@ Student getStudentByPin(Student array[], string pin, int size) {
     }
 }
 
-string getStudentInfoByPin(Student array[], string pin, int size) {
+string getStudentInfoByPin(Student array[], string pin, int size) { //Displays student info based on PIN
     string returnString;
     for(int i = 0; i < size; i++) {
         if(pin == array[i].getPin()) {
@@ -218,9 +218,9 @@ public:
 int main()
 {
     int const SIZE = 10;
-    list<Student> lunchList;
-    LinkedList studentLinkedList;
-    Student Jessica("Jessica", "Jones", "10", "2000", "5.99");
+    list<Student> lunchList; //List Creation
+    LinkedList studentLinkedList; //Linked List Creation
+    Student Jessica("Jessica", "Jones", "10", "2000", "5.99"); //Initial Student Objects
     Student Scoob("Scooby", "Doo", "12", "2001", "1.99");
     Student Scott("Scott", "Lang", "11", "2002", "0.99");
     Student Robert("Robert", "Downey Jr.", "9", "2003", "4.99");
@@ -234,7 +234,7 @@ int main()
     Student studentArray[SIZE] = { Jessica, Scoob, Scott, Robert, ChrisP, ChrisE, Gage, Bob, Polly, Peggy}; //Student Array
 
     string userInputString = "";
-    while(userInputString != "stop") {
+    while(userInputString != "stop") { //Program runs while input != 'stop'
     cout << "Please Select an Option\n --------------------------------------\n";
     cout << "1. Take Lunch Attendance\n2. Display Lunch Attendance \n3. Lunch Help - Sides \n4. Lunch Help - Drinks \n\n'stop' to end program\n";
     cin >> userInputString;
