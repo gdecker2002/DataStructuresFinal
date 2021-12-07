@@ -238,15 +238,18 @@ int main()
     cout << "Please Select an Option\n --------------------------------------\n";
     cout << "1. Take Lunch Attendance\n2. Display Lunch Attendance \n3. Lunch Help - Sides \n4. Lunch Help - Drinks \n\n'stop' to end program\n";
     cin >> userInputString;
+    cin.ignore(std::numeric_limits<streamsize>::max(), '\n'); //Used to avoid multiple input with spaces
     while(userInputString != "1" && userInputString != "2" && userInputString != "3" && userInputString != "4" && userInputString != "stop") {
         cout << "Invalid Choice (1-4): ";
         cin >> userInputString;
+        cin.ignore(std::numeric_limits<streamsize>::max(), '\n'); //Used to avoid multiple input with spaces
     }
     if(userInputString == "1") {
         cout << "\nEnter '0' at any point to return to the main menu\n--------------------------------------\n";
         while(userInputString != "0") {
             cout << "Enter lunch number: "; //Need to loop through students Pin numbers and make sure its a real pin
             cin >> userInputString;
+            cin.ignore(std::numeric_limits<streamsize>::max(), '\n'); //Used to avoid multiple input with spaces
 
             if(userInputString == "0") { //breaks out of if statement back to menu if 0
                 break;
@@ -255,6 +258,7 @@ int main()
             while(!checkPin(studentArray, userInputString, SIZE)) {//Function here for if PIN is real, loop through student array
                 cout << "Invalid Lunch Number: "; //Need to loop through students Pin numbers and make sure its a real pin
                 cin >> userInputString;
+                cin.ignore(std::numeric_limits<streamsize>::max(), '\n'); //Used to avoid multiple input with spaces
                 if(userInputString == "0") { //breaks while loop
                     break;
                 }
@@ -298,7 +302,7 @@ int main()
         cin >> userInputString;
     }
     else if(userInputString == "4"){
-        cout << "\nLunch Help - Drink\n --------------------------------------\n";
+        cout << "\nLunch Help - Drinks\n --------------------------------------\n";
         drinkTreeDecisions(); //Creates Tree and calls for the decision tree to be traversed
         cout << "\nenter any key to return\n"; //Prevents flood of info and final decision result from being buried
         cin >> userInputString;

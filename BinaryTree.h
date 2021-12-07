@@ -199,14 +199,16 @@ void BinaryTree::getUserDecisions(Node *nodePtr) {
     if (nodePtr->left != NULL) {
         cout << nodePtr->sData << endl;
         cin >> userInput;
-        while(userInput != "y" && userInput != "n") {
-            cout << "user input should be 'y' or 'n'" << endl;
+        cin.ignore(std::numeric_limits<streamsize>::max(), '\n'); //Used to avoid multiple input with spaces
+        while(userInput != "y" && userInput != "n" && userInput != "Y" && userInput != "N") {
+            cout << "input should be 'y' or 'n'" << endl;
             cin >> userInput;
+            cin.ignore(std::numeric_limits<streamsize>::max(), '\n'); //Used to avoid multiple input with spaces
         }
-        if(userInput == "y") {
+        if(userInput == "y" || userInput == "Y") { //Traverses down left node
             getUserDecisions(nodePtr->left);
         }
-        else {
+        else { //traverses down right node
             getUserDecisions(nodePtr->right);
         }
     }
